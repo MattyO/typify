@@ -1,7 +1,7 @@
 import inspect
 import json
 
-class Matcher:
+class Matcher(object):
 
     def __init__(self, *args, **kwargs):
         if 'key' in kwargs:
@@ -19,21 +19,24 @@ class IntegerMatcher(Matcher):
 class StringMatcher(Matcher):
     pass
 
-
 class CollectionMatcher(Matcher):
-    pass
 
-    #def __init__(self, matcher_cls, **kwargs):
-    #    self.matcher_model = matcher_cls
-    #    super(CollectionMatcher, self).__init__(**kwargs)
+    def __init__(self, matcher_cls, **kwargs):
+        self.matcher_model = matcher_cls
+        super(CollectionMatcher, self).__init__(**kwargs)
+
+    def parse(self, value):
+        return [ self.matcher_model.from_dict(inner_dict) for inner_dict in value ]
 
 class ObjectMatcher(Matcher):
-    pass
 
-#    def __init__(self, matcher_cls, **kwargs):
-#        self.matcher_model = matcher_cls
-#        super(ObjectMatcher, self).__init__(**kwargs)
-#
+    def __init__(self, matcher_cls, **kwargs):
+        self.matcher_model = matcher_cls
+        super(ObjectMatcher, self).__init__(**kwargs)
+
+    def parse(self, value):
+        return self.matcher_model.from_dict(value)
+
 
 def find_in(key, the_object, wrapped_in):
     if not wrapped_in:
@@ -47,19 +50,20 @@ def find_in(key, the_object, wrapped_in):
 
 class Model(object):
     @classmethod
-    def from_json(cls, payload):
+    def from_dict(cls, a_dict):
+        inst = cls.__new__(cls)
         attributes = {}
-        json_object = json.loads(payload)
         matchers = filter(lambda key_value: isinstance(key_value[1], Matcher), inspect.getmembers(cls))
 
         for key, matcher in matchers:
             key = getattr(matcher, 'key', key)
-            value = find_in(key, json_object, matcher.wrap)
-            attributes[key] = matcher.parse(value)
+            value = find_in(key, a_dict, matcher.wrap)
+            setattr(inst, key, matcher.parse(value))
 
-        print attributes
-
-        inst = type(cls.__name__, (cls,), attributes)
-        super(cls, inst).__init__(inst)
-
+        inst.__init__()
         return inst
+
+    @classmethod
+    def from_json(cls, payload):
+        json_object = json.loads(payload)
+        return cls.from_dict(json_object)
