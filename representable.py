@@ -38,6 +38,9 @@ class CollectionMatcher(Matcher):
     def parse(self, value):
         return [ self.matcher_model.from_dict(inner_dict) for inner_dict in value ]
 
+    def convert(self, value):
+        return [ a_model.to_dict() for a_model in value ]
+
 class ObjectMatcher(Matcher):
 
     def __init__(self, matcher_cls, **kwargs):
@@ -46,6 +49,9 @@ class ObjectMatcher(Matcher):
 
     def parse(self, value):
         return self.matcher_model.from_dict(value)
+
+    def convert(self, value):
+        return value.to_dict()
 
 
 def find_in(key, the_object, wrapped_in):
