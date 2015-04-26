@@ -15,6 +15,9 @@ class Matcher(object):
     def parse(self, value):
         return value
 
+    def convert(self, value):
+        return value
+
 class IntegerMatcher(Matcher):
     def parse(self, value):
         return int(value)
@@ -52,16 +55,21 @@ def find_in(key, the_object, wrapped_in):
 
 
 class Model(object):
+
+    @classmethod
+    def matchers(cls):
+        return filter(lambda key_value: isinstance(key_value[1], Matcher), inspect.getmembers(cls))
+
     @classmethod
     def from_dict(cls, a_dict):
         inst = cls.__new__(cls)
         attributes = {}
-        matchers = filter(lambda key_value: isinstance(key_value[1], Matcher), inspect.getmembers(cls))
+        matchers = cls.matchers()
 
-        for key, matcher in matchers:
-            key = getattr(matcher, 'key', key)
+        for attribute, matcher in matchers:
+            key = getattr(matcher, 'key', attribute)
             value = find_in(key, a_dict, matcher.wrap)
-            setattr(inst, key, matcher.parse(value))
+            setattr(inst, attribute, matcher.parse(value))
 
         inst.__init__()
         return inst
@@ -70,3 +78,15 @@ class Model(object):
     def from_json(cls, payload):
         json_object = json.loads(payload)
         return cls.from_dict(json_object)
+
+    def to_dict(self):
+        returned_dict = {}
+        for attribute, matcher in self.matchers():
+            key = getattr(matcher, 'key', attribute)
+            value = matcher.covert(getattr(self, attribute))
+            returned_dict[key] = value
+
+        return returned_dict
+
+    def to_json(self):
+        return json.dumps(self.to_dict())
