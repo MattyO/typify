@@ -1,5 +1,6 @@
 import inspect
 import json
+import copy
 
 class Matcher(object):
 
@@ -11,6 +12,9 @@ class Matcher(object):
 
         if 'parse' in kwargs:
             self.parse = kwargs['parse']
+
+        if 'convert' in kwargs:
+            self.convert = kwargs['convert']
 
     def parse(self, value):
         return value
@@ -45,14 +49,33 @@ class ObjectMatcher(Matcher):
 
 
 def find_in(key, the_object, wrapped_in):
+
     if not wrapped_in:
         return the_object[key]
+
+    wrapped_in = copy.copy(wrapped_in)
 
     if isinstance(wrapped_in, basestring):
         wrapped_in = [wrapped_in]
 
     return find_in(key, the_object[wrapped_in.pop(0)], wrapped_in)
 
+def set_or_create(key, value, the_object, wrapped_in):
+
+    if not wrapped_in:
+        the_object[key] = value
+        return
+
+    wrapped_in = copy.copy(wrapped_in)
+
+    if isinstance(wrapped_in, basestring):
+        wrapped_in = [wrapped_in]
+
+    new_key = wrapped_in.pop(0)
+    if new_key not in the_object:
+        the_object[new_key] = {}
+
+    return set_or_create(key, value, the_object[new_key], wrapped_in)
 
 class Model(object):
 
@@ -83,8 +106,8 @@ class Model(object):
         returned_dict = {}
         for attribute, matcher in self.matchers():
             key = getattr(matcher, 'key', attribute)
-            value = matcher.covert(getattr(self, attribute))
-            returned_dict[key] = value
+            value = matcher.convert(getattr(self, attribute))
+            set_or_create(key, value, returned_dict, matcher.wrap)
 
         return returned_dict
 

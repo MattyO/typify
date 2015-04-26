@@ -15,10 +15,10 @@ class Record(representable.Model):
     id = representable.IntegerMatcher()
     name = representable.StringMatcher()
     zip = representable.IntegerMatcher(key='postal_code')
-    #created_at = representable.StringMatcher(parse=lambda x: datetime.datetime.strptime(x, '%Y-%m-%dT%H:%M:%S.%f'), convert=lambda x: x.isoformat())
+    created_at = representable.StringMatcher(parse=lambda x: datetime.datetime.strptime(x, '%Y-%m-%dT%H:%M:%S.%f'), convert=lambda x: x.isoformat())
     #songs = representable.CollectionMatcher(Song)
     #author = representable.ObjectMatcher(Author)
-    #self = representable.StringMatcher(wrap='_links')
+    self = representable.StringMatcher(wrap='_links')
     next = representable.StringMatcher(wrap='_links')
     embedded_link = representable.StringMatcher(wrap=['_links', 'embedded'])
 
