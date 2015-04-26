@@ -9,6 +9,9 @@ class Matcher(object):
 
         self.wrap = kwargs.get('wrap', None)
 
+        if 'parse' in kwargs:
+            self.parse = kwargs['parse']
+
     def parse(self, value):
         return value
 
