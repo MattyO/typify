@@ -23,10 +23,12 @@ class Matcher(object):
         return value
 
 class IntegerMatcher(Matcher):
-    def parse(self, value):
-        return int(value)
+    pass
 
 class StringMatcher(Matcher):
+    pass
+
+class ListMatcher(Matcher):
     pass
 
 class CollectionMatcher(Matcher):
