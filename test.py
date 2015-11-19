@@ -36,13 +36,9 @@ printer = pprint.PrettyPrinter()
 print 'start of the real test'
 #print Record().to_json()
 record = Record()
-
-print record
-print record.__dict__
-print record.author.__dict__
-print record.author.info.__dict__
 print record.to_json()
-#print record.songs[0].__dict__
+#record = Record.from_json("{\"id\":1}")
+#print record.to_json()
 
 #printer.pprint(record.to_dict())
 #print record.to_json()

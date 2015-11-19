@@ -37,7 +37,7 @@ class Model(object):
 
         for attribute, matcher in matchers:
             key = getattr(matcher, 'key', attribute)
-            value = helpers.find_in(key, a_dict, matcher.wrap)
+            value = helpers.find_in(key, a_dict, matcher.wrap, matcher.default())
             setattr(inst, attribute, matcher.parse(value))
 
         inst.__init__()
