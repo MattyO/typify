@@ -35,10 +35,10 @@ printer = pprint.PrettyPrinter()
 
 print 'start of the real test'
 #print Record().to_json()
-record = Record()
-print record.to_json()
-#record = Record.from_json("{\"id\":1}")
+#record = Record()
 #print record.to_json()
+record = Record.from_json("{\"id\":1}")
+print record.to_json()
 
 #printer.pprint(record.to_dict())
 #print record.to_json()

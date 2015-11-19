@@ -17,7 +17,6 @@ class MetaModel(type):
         for key, matcher in matchers:
             namespace[key] = matcher.default()
         namespace['_meta'] = matchers
-        print namespace
 
         return super(MetaModel, meta).__new__(meta, name, bases, namespace)
 
@@ -38,7 +37,9 @@ class Model(object):
         for attribute, matcher in matchers:
             key = getattr(matcher, 'key', attribute)
             value = helpers.find_in(key, a_dict, matcher.wrap, matcher.default())
-            setattr(inst, attribute, matcher.parse(value))
+            if isinstance(value, dict):
+                value = matcher.parse(value)
+            setattr(inst, attribute, value)
 
         inst.__init__()
         return inst
@@ -51,9 +52,6 @@ class Model(object):
     def to_dict(self):
         returned_dict = {}
         for attribute, matcher in self.matchers():
-            print attribute
-            print matcher
-            print matcher.wrap
             key = getattr(matcher, 'key', attribute)
             value = matcher.convert(getattr(self, attribute))
             helpers.set_or_create(key, value, returned_dict, matcher.wrap)
