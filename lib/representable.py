@@ -37,8 +37,11 @@ class Model(object):
         for attribute, matcher in matchers:
             key = getattr(matcher, 'key', attribute)
             value = helpers.find_in(key, a_dict, matcher.wrap, matcher.default())
-            if isinstance(value, dict):
-                value = matcher.parse(value)
+            if not isinstance(value, cls):
+                if hasattr(matcher, 'merge') and callable(matcher.merge):
+                    value = matcher.merge(a_dict)
+                else:
+                    value = matcher.parse(value)
             setattr(inst, attribute, value)
 
         inst.__init__()

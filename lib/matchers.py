@@ -12,6 +12,10 @@ class Matcher(object):
         if 'convert' in kwargs:
             self.convert = kwargs['convert']
 
+        if 'merge' in kwargs:
+            self.merge = kwargs['merge']
+
+
         self._default = kwargs.get('default', lambda: None)
 
     def parse(self, value):
