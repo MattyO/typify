@@ -4,21 +4,18 @@ import json
 import matchers
 import helpers
 
-#def find_matchers(cls):
-#    return filter(lambda key_value: isinstance(key_value[1], matchers.Matcher), inspect.getmembers(cls))
-
-def find_matchers(n):
-    return [(key, value) for key, value in n.items() if isinstance(value, matchers.Matcher)]
-
-
 class MetaModel(type):
     def __new__(meta, name, bases, namespace):
-        matchers = find_matchers(namespace)
+        matchers = MetaModel.find_matchers(namespace)
         for key, matcher in matchers:
             namespace[key] = matcher.default()
         namespace['_meta'] = matchers
 
         return super(MetaModel, meta).__new__(meta, name, bases, namespace)
+
+    @classmethod
+    def find_matchers(cls, n):
+        return [(key, value) for key, value in n.items() if isinstance(value, matchers.Matcher)]
 
 class Model(object):
 
