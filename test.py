@@ -1,5 +1,5 @@
 import datetime
-import lib as typify
+import typify
 import pprint
 
 
