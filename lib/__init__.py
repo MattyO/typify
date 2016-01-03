@@ -1,2 +1,2 @@
-from representable import Model
+from typify import Model
 from matchers import IntegerMatcher, StringMatcher, ListMatcher, CollectionMatcher, ObjectMatcher

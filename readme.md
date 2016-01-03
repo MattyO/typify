@@ -1,8 +1,8 @@
 Basic Ussage
 ----
-    class Record(representable.Model):                                                                                                                                                                    
-        id = representable.IntegerMatcher()                                                                                                                                                               
-        name = representable.StringMatcher())  
+    class Record(typify.Model):                                                                                                                                                                    
+        id = typify.IntegerMatcher()                                                                                                                                                               
+        name = typify.StringMatcher())  
 
     record_json = "{\"id\":1,\"name\":\"testname\"}
     
@@ -62,59 +62,59 @@ Supported Formats
     
 Renaming Attributes
 ---
-    class Record(representable.Model):
-        zip = representable.IntegerMatcher(key='postal_code')
+    class Record(typify.Model):
+        zip = typify.IntegerMatcher(key='postal_code')
         
 Parsing Attributes into complex type
 ---
-    class Record(representable.Model):
-        created_at = representable.StringMatcher(parse=lambda x: datetime.datetime.strptime(x, '%Y-%m-%dT%H:%M:%S.%f'))
+    class Record(typify.Model):
+        created_at = typify.StringMatcher(parse=lambda x: datetime.datetime.strptime(x, '%Y-%m-%dT%H:%M:%S.%f'))
         
 Converting complex type when writing to json
 ---
-    class Record(representable.Model):
-        created_at = representable.StringMatcher(convert=lambda x: x.isoformat(), default=lambda: datetime.datetime.now())
+    class Record(typify.Model):
+        created_at = typify.StringMatcher(convert=lambda x: x.isoformat(), default=lambda: datetime.datetime.now())
         
 Wrapped attributes
 ---
-    class Record(representable.Model):
-        self = representable.StringMatcher(wrap='_links')
-        embedded_link = representable.StringMatcher(wrap=['_links', 'embedded'])
+    class Record(typify.Model):
+        self = typify.StringMatcher(wrap='_links')
+        embedded_link = typify.StringMatcher(wrap=['_links', 'embedded'])
         
 Nested Objects
 ---
 
-    class Author(representable.Model):                                                                                                                                                                    
-        id = representable.IntegerMatcher()                                                                                                                                                               
-        name = representable.StringMatcher()
+    class Author(typify.Model):                                                                                                                                                                    
+        id = typify.IntegerMatcher()                                                                                                                                                               
+        name = typify.StringMatcher()
         
-    class Record(representable.Model): 
-        author = representable.ObjectMatcher(Author)
+    class Record(typify.Model): 
+        author = typify.ObjectMatcher(Author)
         
 Objects can be nested forever and ever
 ---
-     class AuthorInfo(representable.Model):                                                                                                                                                                
-        id = representable.IntegerMatcher()                                                                                                                                                               
-        email = representable.StringMatcher()  
+     class AuthorInfo(typify.Model):                                                                                                                                                                
+        id = typify.IntegerMatcher()                                                                                                                                                               
+        email = typify.StringMatcher()  
    
-    class Author(representable.Model):                                                                                                                                                                    
-        id = representable.IntegerMatcher()                                                                                                                                                               
-        name = representable.StringMatcher()
-        info  = representable.ObjectMatcher(AuthorInfo)
+    class Author(typify.Model):                                                                                                                                                                    
+        id = typify.IntegerMatcher()                                                                                                                                                               
+        name = typify.StringMatcher()
+        info  = typify.ObjectMatcher(AuthorInfo)
         
-    class Record(representable.Model): 
-        author = representable.ObjectMatcher(Author)
+    class Record(typify.Model): 
+        author = typify.ObjectMatcher(Author)
         
 Collections of objects
 ---
-    class Song(representable.Model):                                                                                                                                                                      
-        id = representable.IntegerMatcher()                                                                                                                                                               
-        name = representable.StringMatcher() 
+    class Song(typify.Model):                                                                                                                                                                      
+        id = typify.IntegerMatcher()                                                                                                                                                               
+        name = typify.StringMatcher() 
     
-    class Record(representable.Model): 
-        songs = representable.CollectionMatcher(Song)
+    class Record(typify.Model): 
+        songs = typify.CollectionMatcher(Song)
         
 List of basic types
 ---
-    class Record(representable.Model): 
-        list_thing = representable.ListMatcher()
+    class Record(typify.Model): 
+        list_thing = typify.ListMatcher()
