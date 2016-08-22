@@ -30,15 +30,16 @@ class Record(typify.Model):
     list_thing = typify.ListMatcher()
 
 
-record=Record.from_json("{\"id\":1,\"name\":\"testname\",\"postal_code\":44024,\"created_at\":\"2015-04-24T21:51:50.691473\",\"songs\":[{\"id\":1,\"name\":\"songname\"}],\"author\":{ \"id\": 1, \"name\": \"test author\", \"info\":{\"id\":1, \"email\":\"test@example.com\"}}, \"_links\":{\"self\":\"testselflink\",\"next\":\"testnextlink\",\"embedded\":{\"embedded_link\":\"testembeddedlink\"}}, \"list_thing\":[1,2,3,4]}")
+#record=Record.from_json("{\"id\":1,\"name\":\"testname\",\"postal_code\":44024,\"created_at\":\"2015-04-24T21:51:50.691473\",\"songs\":[{\"id\":1,\"name\":\"songname\"}],\"author\":{ \"id\": 1, \"name\": \"test author\", \"info\":{\"id\":1, \"email\":\"test@example.com\"}}, \"_links\":{\"self\":\"testselflink\",\"next\":\"testnextlink\",\"embedded\":{\"embedded_link\":\"testembeddedlink\"}}, \"list_thing\":[1,2,3,4]}")
 
 printer = pprint.PrettyPrinter()
 
 #print 'start of the real test'
-#print Record().to_json()
+print Record().to_json()
+
 #record = Record()
 #record = Record.from_json("{\"id\":1}")
-print record.to_json()
+#print record.to_json()
 
 #printer.pprint(record.to_dict())
 #print record.to_json()

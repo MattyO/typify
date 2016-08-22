@@ -69,6 +69,11 @@ Parsing Attributes into complex type
 ---
     class Record(typify.Model):
         created_at = typify.StringMatcher(parse=lambda x: datetime.datetime.strptime(x, '%Y-%m-%dT%H:%M:%S.%f'))
+
+Merging parts of the document
+---
+    class Record(typify.Model):
+        merged_stuff = typify.StringMatcher(merge=lambda doc: str(doc['id']) + ':' + doc['name'] )
         
 Converting complex type when writing to json
 ---
