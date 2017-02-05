@@ -1,4 +1,4 @@
-Basic Ussage
+Basic Usage
 ----
     class Record(typify.Model):                                                                                                                                                                    
         id = typify.IntegerMatcher()                                                                                                                                                               
@@ -11,7 +11,8 @@ Basic Ussage
     print record.name
     print a_record.to_json()
 
-This is library is to help facilitate creating objects from common text based representation formates(json, yaml, and python dics).  The following response will be used for a common example.  
+This library's objective is to aid the creation of objects from common text based representation formats (JSON, YAML and Python Dictionaries).
+The following response will be used for a common example: 
 
     {
        "id":1,
@@ -75,7 +76,7 @@ Merging parts of the document
     class Record(typify.Model):
         merged_stuff = typify.StringMatcher(merge=lambda doc: str(doc['id']) + ':' + doc['name'] )
         
-Converting complex type when writing to json
+Converting complex type when writing to JSON
 ---
     class Record(typify.Model):
         created_at = typify.StringMatcher(convert=lambda x: x.isoformat(), default=lambda: datetime.datetime.now())
