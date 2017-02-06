@@ -56,7 +56,7 @@ Supported Formats
 
 * to_json
 * to_yaml
-* to_dicttw
+* to_dict
 
     
     
